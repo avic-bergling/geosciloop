@@ -1,15 +1,15 @@
 # GeoSciLoop
 
-GeoSciLoop is a reproducibility-first starter repo for remote-sensing/GIS AI-scientist workflows, with v0.1 focused on a deterministic offline Urban Heat Island demo.
+GeoSciLoop is a reproducibility-first remote-sensing/GIS AI-scientist scaffold focused in v0.1.0 on deterministic offline synthetic Urban Heat Island demos.
 
-GeoSciLoop v0.1 demonstrates the loop shape:
+It demonstrates a small research loop:
 
 ```text
-research question -> structured task -> research plan -> synthetic data manifest
--> UHI analysis -> validators -> model results -> ledger -> report -> benchmark
+research question -> task config -> research plan -> synthetic data
+-> models -> validators -> ledger -> report -> summary -> benchmark summary
 ```
 
-It does not perform full autonomous scientific discovery, call live LLMs, require Google Earth Engine authentication, download large datasets, or make real-world UHI claims.
+GeoSciLoop v0.1.0 does not perform full autonomous scientific discovery, does not make real-world UHI claims, and does not require Google Earth Engine, STAC, OSM, API keys, credentials, or internet access for tests or demos.
 
 ## Quickstart
 
@@ -17,54 +17,94 @@ It does not perform full autonomous scientific discovery, call live LLMs, requir
 python -m pip install -e ".[dev]"
 pytest -q
 geosciloop run configs/uhi_synthetic_demo.yaml --offline
+geosciloop run configs/uhi_morphology_synthetic_demo.yaml --offline
 ```
 
-## Example Output
+If the console script is unavailable in your shell, use the module entry point:
+
+```powershell
+python -m geosciloop.cli run configs/uhi_synthetic_demo.yaml --offline
+python -m geosciloop.cli run configs/uhi_morphology_synthetic_demo.yaml --offline
+```
+
+## What v0.1.0 Does
+
+- Runs a deterministic offline synthetic UHI workflow.
+- Runs a second deterministic morphology UHI demo with building height, floor-area ratio, functional zones, population exposure, vegetation, built-up intensity, and water signal.
+- Separates variable roles into target, predictors, risk indicators, categorical variables, and metadata variables.
+- Fits linear regression and random forest models on synthetic tabular grid data.
+- Writes deterministic validation results for value ranges, missing values, metrics, causal overclaim risk, spatial split leakage risk, categorical encoding, multicollinearity, and claim support.
+- Writes machine-readable provenance and audit files, including `research_ledger.json`, `data_manifest.json`, `metrics.json`, `validation_report.json`, `synthetic_truth.json`, and `run_log.json`.
+- Writes `report.md` and `summary.md` from artifacts, with synthetic-data disclaimers and limitations.
+- Writes a decomposed `benchmark_summary.json` quality gate. Use this file as the source of truth for artifact completeness and benchmark-style release checks.
+- Provides optional STAC, GEE, OSM, and provenance adapter interfaces for future work without making them part of the offline v0.1 demo.
+
+## What v0.1.0 Does Not Do
+
+- It is not a real-data remote-sensing analysis system.
+- It is not a complete autonomous scientist.
+- It does not authenticate to Google Earth Engine.
+- It does not download STAC, OSM, GHSL, WorldPop, or other external datasets during tests or demos.
+- It does not validate real raster CRS, alignment, NoData, cloud masks, or sensor QA fields.
+- It does not prove causal effects.
+- It does not treat synthetic LST associations as evidence about any real city.
+- It does not use LangGraph, Snakemake, Prefect, CrewAI, AutoGen, or another stateful harness.
+
+## Configs
+
+- `configs/uhi_synthetic_demo.yaml`: original synthetic UHI demo.
+- `configs/uhi_morphology_synthetic_demo.yaml`: synthetic morphology demo with functional zones and population exposure as a risk indicator.
+
+Both configs run offline and write outputs under `outputs/`, which is intentionally ignored by git.
+
+## Output Artifacts
+
+A successful run creates a directory such as `outputs/uhi_morphology_synthetic_demo/`:
 
 ```text
-outputs/uhi_synthetic_demo/
-|-- data_manifest.json
-|-- research_plan.yaml
-|-- research_ledger.json
-|-- validation_report.json
-|-- metrics.json
-|-- tables/
-|   |-- synthetic_uhi_data.csv
-|   `-- model_predictions.csv
-|-- figures/
-|   |-- lst_distribution.png
-|   |-- ndvi_vs_lst.png
-|   |-- predicted_vs_observed.png
-|   `-- feature_importance.png
-|-- report.md
-`-- run_log.json
+data_manifest.json          synthetic data inventory and variable roles
+synthetic_truth.json        machine-readable synthetic generation notes
+research_plan.yaml          deterministic plan and hypotheses
+metrics.json                model metrics, correlations, encoding, and split metadata
+validation_report.json      deterministic pass/warn/fail checks
+research_ledger.json        config, data, metrics, validations, warnings, claims, outputs
+benchmark_summary.json      artifact completeness and benchmark quality gate
+report.md                   artifact-grounded scientific-style report
+summary.md                  human-readable output guide
+run_log.json                run metadata and hard failures
+tables/                     generated CSV tables
+figures/                    generated diagnostic figures
 ```
 
-## Architecture
+The JSON/YAML artifacts are the audit source of truth. The Markdown files are generated views over those artifacts.
 
-```mermaid
-flowchart LR
-    Q[Research question] --> C[Task config]
-    C --> P[Deterministic planner]
-    P --> W[Offline UHI workflow]
-    W --> V[Validators]
-    W --> M[Model metrics]
-    V --> L[Research ledger]
-    M --> L
-    L --> R[Artifact-grounded report]
-    R --> B[Benchmark summary]
+## Project Status
+
+GeoSciLoop is ready for v0.1.0 tag preparation as an offline deterministic architecture demo once the working tree is committed cleanly and final verification commands pass. It is not yet ready to be described as a real-data UHI analysis system.
+
+See:
+
+- `docs/project_status.md`
+- `docs/scientific_reliability_audit.md`
+- `docs/release_readiness.md`
+- `docs/release_notes_v0.1.0.md`
+
+## Development And Validation
+
+Run the local checks:
+
+```powershell
+python -m pip install -e ".[dev]"
+pytest -q
+geosciloop run configs/uhi_synthetic_demo.yaml --offline
+geosciloop run configs/uhi_morphology_synthetic_demo.yaml --offline
 ```
 
-The scientific reliability surface is deterministic validators plus a machine-readable research ledger. Agent runtimes, GEE/STAC adapters, and citation checking are deferred until the offline v0.1 loop is reliable.
-
-## References
-
-See `docs/reference_map.md` for the inspected references and what GeoSciLoop borrows conceptually. No source code from those repositories is copied into v0.1.
+The tests are designed to be offline and fast. Do not add tests that require API keys, GEE auth, STAC access, OSM downloads, or live internet data.
 
 ## Roadmap
 
-- v0.1: deterministic synthetic UHI workflow, validators, ledger, report, tests.
-- v0.2: optional real-data adapters for STAC, GEE, OSM, GHSL, and WorldPop.
-- v0.3: explicit state-machine or LangGraph-style runtime after validation surfaces exist.
-- v0.4: GeoSciBench-style benchmark tasks.
-- v0.5: citation checking and human-in-the-loop scientific review.
+- v0.1.0: offline deterministic architecture demo with synthetic UHI and morphology workflows, validators, ledger, reports, summary, and decomposed evaluator.
+- v0.2.0: fixture-based real-data adapter prototype that preserves offline CI and validates CRS, raster alignment, NoData, source provenance, and split strategy.
+- v0.3.0: stateful agent or workflow harness prototype only after real workflow complexity justifies it.
+- Later: broader benchmark tasks, citation checking, human review, and real-world scientific claim gates.

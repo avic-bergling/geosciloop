@@ -6,3 +6,14 @@ pytest-cache-files-*/
 __pycache__/
 *.py[cod]
 *.egg-info/
+build/
+dist/
+.venv/
+venv/
+env/
+ENV/
+.env
+.env.*
+*.log
+*.tmp
+*.bak

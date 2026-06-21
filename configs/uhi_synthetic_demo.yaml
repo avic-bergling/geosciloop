@@ -5,6 +5,7 @@ aoi_name: "Synthetic Grid City"
 start_date: "2024-07-01"
 end_date: "2024-08-31"
 target_variable: lst_celsius
+target: lst_celsius
 explanatory_variables:
   - ndvi
   - ndbi
@@ -12,6 +13,19 @@ explanatory_variables:
   - population_density
   - road_density
   - building_density
+predictors:
+  - ndvi
+  - ndbi
+  - ndwi
+  - population_density
+  - road_density
+  - building_density
+risk_indicators: []
+categorical_variables: []
+metadata_variables:
+  - cell_id
+  - x
+  - y
 grid_size_m: 250
 models:
   - linear_regression

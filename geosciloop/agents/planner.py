@@ -13,6 +13,15 @@ def build_research_plan(config: TaskConfig) -> dict[str, Any]:
         "NDBI and building density are positively associated with synthetic land surface temperature.",
         "NDWI is negatively associated with synthetic land surface temperature in this offline demo.",
     ]
+    if {"building_height", "floor_area_ratio", "functional_zone", "population_exposure"}.intersection(config.explanatory_variables):
+        hypotheses.extend(
+            [
+                "Floor area ratio is hypothesized to be positively associated with synthetic land surface temperature.",
+                "Building height is treated as a mixed 3D morphology variable rather than a simple directional heat driver.",
+                "Functional zones are hypothesized to encode contextual differences in synthetic land surface temperature.",
+                "Population exposure is treated as a heat-risk relevance indicator, not as evidence that population causes LST.",
+            ]
+        )
     return {
         "project_name": config.project_name,
         "research_question": config.research_question,
@@ -21,12 +30,13 @@ def build_research_plan(config: TaskConfig) -> dict[str, Any]:
         "time_range": {"start_date": config.start_date, "end_date": config.end_date},
         "target_variable": config.target_variable,
         "explanatory_variables": config.explanatory_variables,
+        "variable_roles": config.variable_roles(),
         "hypotheses": hypotheses,
         "data_sources": ["deterministic synthetic tabular grid data"],
         "preprocessing": ["generate synthetic grid", "validate ranges", "split deterministic train/test"],
         "modeling": config.models,
         "diagnostics": ["R2", "RMSE", "MAE", "coefficient direction", "feature importance"],
-        "outputs": ["data manifest", "metrics", "figures", "research ledger", "Markdown report"],
+        "outputs": ["data manifest", "metrics", "figures", "research ledger", "Markdown report", "human-readable summary"],
         "limitations": [
             "Synthetic data are not evidence about a real city.",
             "Associations are not causal effects.",

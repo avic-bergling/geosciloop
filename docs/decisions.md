@@ -35,3 +35,25 @@ Real GEE, STAC, and OSM integrations are deferred to optional adapters after v0.
 Status: accepted.
 
 GeoSciLoop v0.1 depends on numpy, pandas, scikit-learn, matplotlib, and PyYAML for the offline synthetic workflow, plus pytest for development tests. Heavier geospatial, GEE, and orchestration dependencies remain optional future extras.
+
+## Decision: keep the simple runner after harness evaluation
+
+Status: accepted.
+
+After reviewing the current deterministic runner, validators, ledger, reports, benchmark summary, tests, and optional real-data adapter stubs, GeoSciLoop should keep the simple Python runner for now. LangGraph, Snakemake, and Prefect are not justified yet because the current workflow is a single deterministic local pipeline with a clear validation surface and no current need for stateful agent loops, formal file-DAG reruns, or production scheduling.
+
+Future adoption triggers:
+
+- LangGraph: add only when planner/executor/validator/report loops need durable state, retries, revision cycles, or human review.
+- Snakemake: add only when real-data workflows need reproducible file-based DAG execution across multiple reusable targets.
+- Prefect: add only when scheduled production-style runs, operational retries, monitoring, or deployment concerns exist.
+
+Any future harness must be optional, preserve offline tests, and prove artifact equivalence with the current simple runner before it becomes a recommended path.
+
+## Decision: generated runtime outputs stay out of version control
+
+Status: accepted.
+
+GeoSciLoop v0.1 release artifacts should track source code, configs, tests, docs, and small curated documentation examples only. Full runtime output folders under `outputs/`, pytest temporary directories, build artifacts, editable-install metadata, local virtual environments, and temporary logs are ignored through `.gitignore`.
+
+The reason is practical reproducibility: outputs should be regenerated from configs and commands, not committed as stale release state. If a future release needs sample artifacts, add a deliberately small curated directory such as `docs/example_outputs/` with hand-selected files and document how it was produced.

@@ -12,6 +12,8 @@ CLAIM_PATTERNS = {
     "building_density": {"labels": ["building_density", "building density"], "positive": "building_density positive association"},
     "population_density": {"labels": ["population_density", "population density"], "positive": "population_density positive association"},
     "road_density": {"labels": ["road_density", "road density"], "positive": "road_density positive association"},
+    "floor_area_ratio": {"labels": ["floor_area_ratio", "floor area ratio"], "positive": "floor_area_ratio positive association"},
+    "population_exposure": {"labels": ["population_exposure", "population exposure"], "positive": "population_exposure positive association"},
 }
 
 
@@ -45,7 +47,7 @@ def check_conclusion_support(claims: list[str], evidence: dict[str, Any]) -> lis
 
     for claim in claims:
         lowered = claim.lower()
-        if any(term in lowered for term in ["cause", "causes", "causal"]):
+        if any(term in lowered for term in ["cause", "causes", "causal", "drives", "determines"]):
             results.append(
                 ValidationResult(
                     "conclusion_support",
@@ -54,10 +56,21 @@ def check_conclusion_support(claims: list[str], evidence: dict[str, Any]) -> lis
                 )
             )
 
+        direction = _claim_direction(lowered)
+        if "building_height" in lowered and direction is not None:
+            results.append(
+                ValidationResult(
+                    "conclusion_support",
+                    "warn",
+                    f"building_height interpretation may be oversimplified and should be treated as mixed or context dependent: {claim}",
+                    {"claim": claim},
+                )
+            )
+            continue
+
         if "lst" not in lowered:
             continue
 
-        direction = _claim_direction(lowered)
         if direction is None:
             continue
 

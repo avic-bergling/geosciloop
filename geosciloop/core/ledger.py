@@ -19,6 +19,10 @@ class ResearchLedger:
     validation_summary: dict[str, int] = field(default_factory=dict)
     metrics: dict[str, Any] = field(default_factory=dict)
     report_claims: list[dict[str, Any]] = field(default_factory=list)
+    warnings: list[dict[str, Any]] = field(default_factory=list)
+    variable_roles: dict[str, Any] = field(default_factory=dict)
+    synthetic_truth: dict[str, Any] = field(default_factory=dict)
+    split_metadata: dict[str, Any] = field(default_factory=dict)
 
     @classmethod
     def from_config(cls, config: TaskConfig) -> "ResearchLedger":
@@ -38,6 +42,10 @@ class ResearchLedger:
             "validation_summary": self.validation_summary,
             "metrics": self.metrics,
             "report_claims": self.report_claims,
+            "warnings": self.warnings,
+            "variable_roles": self.variable_roles,
+            "synthetic_truth": self.synthetic_truth,
+            "split_metadata": self.split_metadata,
         }
 
     def write(self, path: Path) -> Path:

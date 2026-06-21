@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 
 from geosciloop.core.state import ValidationResult
+from geosciloop.tools.synthetic_data import ALLOWED_FUNCTIONAL_ZONES
 
 
 INDEX_COLUMNS = ["ndvi", "ndwi", "ndbi"]
@@ -11,6 +12,11 @@ DENSITY_COLUMNS = {
     "population_density": 100000.0,
     "road_density": 100.0,
     "building_density": 1.0,
+}
+OPTIONAL_NON_NEGATIVE_COLUMNS = {
+    "building_height": 200.0,
+    "floor_area_ratio": 25.0,
+    "population_exposure": 500000.0,
 }
 
 
@@ -99,6 +105,51 @@ def check_value_ranges(data: pd.DataFrame) -> list[ValidationResult]:
                     "warn",
                     f"{column} has values above the v0.1 plausible synthetic threshold.",
                     {"count": int(len(high)), "threshold": upper_bound},
+                )
+            )
+
+    for column, upper_bound in OPTIONAL_NON_NEGATIVE_COLUMNS.items():
+        if column not in data:
+            continue
+        numeric, column_results = _numeric_series(data, column)
+        results.extend(column_results)
+        if numeric is None:
+            continue
+        finite = numeric[numeric.notna() & np.isfinite(numeric)]
+        invalid = finite[finite < 0]
+        status = "pass" if invalid.empty else "fail"
+        message = f"{column} is non-negative." if invalid.empty else f"{column} has negative values."
+        results.append(ValidationResult("value_ranges", status, message, {"count": int(len(invalid))}))
+        high = finite[finite > upper_bound]
+        if not high.empty:
+            results.append(
+                ValidationResult(
+                    "value_ranges",
+                    "warn",
+                    f"{column} has values above the v0.1 plausible synthetic threshold.",
+                    {"count": int(len(high)), "threshold": upper_bound},
+                )
+            )
+
+    if "functional_zone" in data:
+        allowed = set(ALLOWED_FUNCTIONAL_ZONES)
+        invalid_zone = data.loc[~data["functional_zone"].isin(allowed), "functional_zone"]
+        if invalid_zone.empty:
+            results.append(
+                ValidationResult(
+                    "value_ranges",
+                    "pass",
+                    "functional_zone values are within the allowed set.",
+                    {"allowed_values": sorted(allowed)},
+                )
+            )
+        else:
+            results.append(
+                ValidationResult(
+                    "value_ranges",
+                    "fail",
+                    "functional_zone has values outside the allowed set.",
+                    {"invalid_values": sorted(str(value) for value in invalid_zone.unique())},
                 )
             )
 
