@@ -1,0 +1,22 @@
+project_name: uhi_synthetic_demo
+task_type: urban_heat_island
+research_question: "How do vegetation, built-up intensity, water presence, and urban density relate to synthetic land surface temperature patterns?"
+aoi_name: "Synthetic Grid City"
+start_date: "2024-07-01"
+end_date: "2024-08-31"
+target_variable: lst_celsius
+explanatory_variables:
+  - ndvi
+  - ndbi
+  - ndwi
+  - population_density
+  - road_density
+  - building_density
+grid_size_m: 250
+models:
+  - linear_regression
+  - random_forest
+output_dir: outputs/uhi_synthetic_demo
+random_seed: 42
+offline: true
+n_cells: 625
