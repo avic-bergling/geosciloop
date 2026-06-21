@@ -1,6 +1,6 @@
 # GeoSciLoop
 
-GeoSciLoop is a reproducibility-first remote-sensing/GIS AI-scientist scaffold focused in v0.1.0 on deterministic offline synthetic Urban Heat Island demos.
+GeoSciLoop is a reproducibility-first remote-sensing/GIS AI-scientist scaffold. v0.1.0 is a deterministic offline synthetic Urban Heat Island demo, and the v0.2.0 work adds a fixture-based real-data adapter prototype for dry-run planning.
 
 It demonstrates a small research loop:
 
@@ -11,6 +11,8 @@ research question -> task config -> research plan -> synthetic data
 
 GeoSciLoop v0.1.0 does not perform full autonomous scientific discovery, does not make real-world UHI claims, and does not require Google Earth Engine, STAC, OSM, API keys, credentials, or internet access for tests or demos.
 
+The v0.2.0 dry-run prototype also remains offline by default. It plans fixture-backed STAC, GEE, OSM, and population-grid metadata but does not download data, authenticate, call live providers, or produce real-world UHI conclusions.
+
 ## Quickstart
 
 ```powershell
@@ -18,6 +20,7 @@ python -m pip install -e ".[dev]"
 pytest -q
 geosciloop run configs/uhi_synthetic_demo.yaml --offline
 geosciloop run configs/uhi_morphology_synthetic_demo.yaml --offline
+geosciloop run configs/uhi_real_pilot_template.yaml --dry-run
 ```
 
 If the console script is unavailable in your shell, use the module entry point:
@@ -25,6 +28,7 @@ If the console script is unavailable in your shell, use the module entry point:
 ```powershell
 python -m geosciloop.cli run configs/uhi_synthetic_demo.yaml --offline
 python -m geosciloop.cli run configs/uhi_morphology_synthetic_demo.yaml --offline
+python -m geosciloop.cli run configs/uhi_real_pilot_template.yaml --dry-run
 ```
 
 ## What v0.1.0 Does
@@ -38,6 +42,24 @@ python -m geosciloop.cli run configs/uhi_morphology_synthetic_demo.yaml --offlin
 - Writes `report.md` and `summary.md` from artifacts, with synthetic-data disclaimers and limitations.
 - Writes a decomposed `benchmark_summary.json` quality gate. Use this file as the source of truth for artifact completeness and benchmark-style release checks.
 - Provides optional STAC, GEE, OSM, and provenance adapter interfaces for future work without making them part of the offline v0.1 demo.
+
+## What v0.2.0 Adds In This Branch
+
+- Adds a dry-run real-data planning template at `configs/uhi_real_pilot_template.yaml`.
+- Adds structured AOI, time range, data source request, data source record, manifest, and split-strategy schema objects.
+- Adds fixture-backed STAC, GEE, OSM, and population-grid adapters.
+- Writes `adapter_plan.json`, `data_source_manifest.json`, `metadata_validation_report.json`, `dry_run_report.md`, `summary.md`, `research_ledger.json`, `benchmark_summary.json`, and `run_log.json` for the dry-run template.
+- Validates planned metadata for CRS, resolution, raster alignment, NoData, cloud/shadow QA, source provenance, and split strategy.
+- Keeps provider-backed access optional future work outside required tests.
+
+## What v0.2.0 Still Does Not Do
+
+- It does not run live STAC, GEE, OSM, GHSL, WorldPop, or other external provider queries by default.
+- It does not authenticate or require API keys.
+- It does not download real rasters, vectors, or population grids.
+- It does not process real pixels or geometries.
+- It does not make real-world UHI conclusions.
+- It does not add a stateful harness.
 
 ## What v0.1.0 Does Not Do
 
@@ -54,6 +76,7 @@ python -m geosciloop.cli run configs/uhi_morphology_synthetic_demo.yaml --offlin
 
 - `configs/uhi_synthetic_demo.yaml`: original synthetic UHI demo.
 - `configs/uhi_morphology_synthetic_demo.yaml`: synthetic morphology demo with functional zones and population exposure as a risk indicator.
+- `configs/uhi_real_pilot_template.yaml`: v0.2 fixture-backed dry-run template for real-data workflow planning.
 
 Both configs run offline and write outputs under `outputs/`, which is intentionally ignored by git.
 
@@ -78,9 +101,25 @@ figures/                    generated diagnostic figures
 
 The JSON/YAML artifacts are the audit source of truth. The Markdown files are generated views over those artifacts.
 
+The v0.2 dry-run creates `outputs/uhi_real_pilot_template/` with:
+
+```text
+adapter_plan.json                 fixture adapter plans
+data_source_manifest.json         planned source metadata and provenance
+metadata_validation_report.json   CRS, resolution, alignment, NoData, QA, provenance, split checks
+validation_report.json            same pass/warn/fail records for unified consumers
+research_ledger.json              config, source requests, plans, manifest, validations, outputs
+benchmark_summary.json            decomposed v0.2 dry-run quality gate
+dry_run_report.md                 human-readable dry-run report
+summary.md                        human-readable output index
+run_log.json                      dry-run status and no-live-dependency flags
+```
+
 ## Project Status
 
 GeoSciLoop v0.1.0 has been tagged and published as an offline deterministic architecture demo. It is not yet ready to be described as a real-data UHI analysis system.
+
+The v0.2.0 work in this branch is a fixture-based real-data adapter prototype for dry-run planning. It is not a released tag unless explicitly tagged later by a maintainer.
 
 See:
 
@@ -98,6 +137,7 @@ python -m pip install -e ".[dev]"
 pytest -q
 geosciloop run configs/uhi_synthetic_demo.yaml --offline
 geosciloop run configs/uhi_morphology_synthetic_demo.yaml --offline
+geosciloop run configs/uhi_real_pilot_template.yaml --dry-run
 ```
 
 The tests are designed to be offline and fast. Do not add tests that require API keys, GEE auth, STAC access, OSM downloads, or live internet data.

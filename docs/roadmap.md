@@ -9,11 +9,13 @@
 - Markdown report generated from artifacts only.
 - Offline tests and standard-library validation checks.
 
-## v0.2: Real data adapters
+## v0.2: Fixture-based real-data adapter prototype
 
-- Optional STAC, GEE, OSM, GHSL, and WorldPop adapters.
+- Fixture-backed STAC, GEE, OSM, and population-grid adapter prototype.
+- Dry-run workflow for real-data UHI planning without live data access.
+- Data source manifest, metadata validators, dry-run report, ledger, and benchmark summary.
 - Offline tests remain the CI baseline.
-- Real-data runs require explicit configuration and documented credentials setup outside tests.
+- Live provider-backed runs require future explicit configuration and documented credentials setup outside tests.
 
 ## v0.3: Stateful agent runtime
 

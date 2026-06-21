@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from geosciloop.benchmark.evaluator import evaluate_run, write_benchmark_summary
+from geosciloop.benchmark.evaluator import evaluate_dry_run, evaluate_run, write_benchmark_summary
 from geosciloop.core.state import ValidationResult
 
 
@@ -130,3 +130,71 @@ def test_write_benchmark_summary_writes_json(tmp_path):
 
     assert path == tmp_path / "benchmark_summary.json"
     assert json.loads(path.read_text(encoding="utf-8")) == evaluation
+
+
+def test_evaluate_dry_run_returns_v0_2_subscores(tmp_path):
+    for name in [
+        "adapter_plan.json",
+        "data_source_manifest.json",
+        "metadata_validation_report.json",
+        "validation_report.json",
+        "research_ledger.json",
+        "dry_run_report.md",
+        "summary.md",
+        "run_log.json",
+    ]:
+        (tmp_path / name).write_text("{}", encoding="utf-8")
+    (tmp_path / "dry_run_report.md").write_text("Dry-run disclaimer. No data were downloaded.", encoding="utf-8")
+    (tmp_path / "summary.md").write_text("No data were downloaded.", encoding="utf-8")
+    _write_json(
+        tmp_path / "adapter_plan.json",
+        {"plans": [{"role": "lst", "adapter": "fixture_stac", "dry_run": True}]},
+    )
+    _write_json(
+        tmp_path / "data_source_manifest.json",
+        {
+            "schema_version": "geosciloop-data-source-manifest-v0.2",
+            "offline": True,
+            "dry_run": True,
+            "sources": [
+                {
+                    "role": "lst",
+                    "provider": "USGS",
+                    "collection": "landsat-c2-l2",
+                    "dataset": "landsat_l2",
+                    "datetime": "2024-07-15T10:00:00Z",
+                    "license": "USGS public domain",
+                    "href": "mock://landsat/l2/ST_B10.tif",
+                    "query": {"bbox": [0, 1, 2, 3]},
+                    "provenance": {"fixture": "stac_landsat_l2_item.json"},
+                    "downloaded": False,
+                    "requires_credentials": False,
+                }
+            ],
+        },
+    )
+    _write_json(
+        tmp_path / "research_ledger.json",
+        {
+            "dry_run": True,
+            "download_performed": False,
+            "credentials_required": False,
+            "adapter_plans": [{"role": "lst"}],
+            "data_source_manifest": {"sources": [{"role": "lst"}]},
+            "metadata_validation_results": [{"name": "crs_metadata", "status": "pass", "message": "ok", "details": {}}],
+            "outputs": {"summary": str(tmp_path / "summary.md")},
+        },
+    )
+    _write_json(tmp_path / "run_log.json", {"offline": True, "dry_run": True, "download_performed": False, "credentials_required": False})
+    validation_results = [
+        ValidationResult("crs_metadata", "pass", "ok"),
+        ValidationResult("split_strategy", "warn", "spatial leakage warning"),
+    ]
+
+    evaluation = evaluate_dry_run(tmp_path, validation_results)
+
+    assert evaluation["schema_version"] == "geosciloop-benchmark-v0.2-dry-run"
+    assert evaluation["evaluation_mode"] == "fixture_real_data_dry_run_v0_2"
+    assert "ai_scientist_score" not in evaluation
+    assert evaluation["sub_scores"]["execution_success"]["status"] == "pass"
+    assert evaluation["sub_scores"]["no_live_dependency_check"]["status"] == "pass"

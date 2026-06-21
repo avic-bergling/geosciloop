@@ -6,7 +6,7 @@ This audit checks whether the current repository keeps synthetic demonstrations 
 
 ## Summary
 
-The offline UHI demos are scientifically disciplined for architecture demonstrations: they label data as synthetic, record variable roles and synthetic generation metadata, avoid causal conclusions, and use deterministic validators. They are not real remote-sensing/GIS science outputs. Real-world reliability remains out of scope until real-data workflows add CRS, raster alignment, NoData, cloud/shadow, data-source, and spatial validation checks.
+The offline UHI demos are scientifically disciplined for architecture demonstrations: they label data as synthetic, record variable roles and synthetic generation metadata, avoid causal conclusions, and use deterministic validators. They are not real remote-sensing/GIS science outputs. The v0.2 dry-run adds fixture-backed metadata planning checks for CRS, raster alignment, NoData, cloud/shadow, data-source provenance, and spatial split strategy, but it still does not validate live real-world data quality.
 
 ## Checklist
 
@@ -22,7 +22,8 @@ The offline UHI demos are scientifically disciplined for architecture demonstrat
 | Functional-zone encoding transparent | Pass | `feature_encoding.functional_zone` in metrics and manifest | Records allowed, observed, counts, baseline, and encoded columns. |
 | Synthetic ground truth recorded | Pass | `synthetic_truth.json`; `data_manifest.synthetic_generation`; ledger copy | Includes formula description, pseudocode, coefficient signs, noise, seed, and role notes. |
 | Variable roles explicit | Pass | `TaskConfig.variable_roles`; configs include `target`, `predictors`, `risk_indicators`, `categorical_variables`, `metadata_variables` | Stored in metrics and ledger. |
-| Real-world data quality validated | Missing | No real-data workflow exists | Adapter interfaces do not validate real rasters, CRS, cloud masks, or external data quality. |
+| Real-world data quality validated | Missing | v0.2 has fixture metadata checks only | Adapter interfaces and dry-run fixtures do not validate real rasters, CRS, cloud masks, or external data quality. |
+| Real-data metadata planning validated | Partial | v0.2 dry-run writes `data_source_manifest.json` and `metadata_validation_report.json` | Checks are deterministic and offline, but fixtures are not authoritative provider metadata. |
 | Spatial autocorrelation handled beyond warning | Partial | Spatial random split warning exists | No spatial-block split or spatial autocorrelation metric is implemented. |
 
 ## Scientific Boundaries
@@ -34,8 +35,8 @@ The offline UHI demos are scientifically disciplined for architecture demonstrat
 
 ## Release Risk
 
-The scientific risk for a v0.1 offline architecture demo is acceptable if release notes clearly state that all results are synthetic. The scientific risk for a v0.2 real-data prototype is still high because adapter interfaces are not wired into an end-to-end real-data workflow and have no provider-backed integration validation.
+The scientific risk for a v0.1 offline architecture demo is acceptable if release notes clearly state that all results are synthetic. The scientific risk for a v0.2 fixture-based real-data planning prototype remains high for any real-world interpretation because there is no provider-backed integration validation and no real pixels or geometries are processed.
 
 ## Recommended Next Scientific Hardening Goal
 
-Before claiming a real-data prototype, add a tiny offline fixture-based real-data workflow that exercises CRS metadata, raster alignment, NoData handling, data-source provenance, and spatial split strategy without requiring internet or credentials.
+Before claiming a live real-data analysis system, add explicit provider-backed configurations, data-quality checks, spatial/block splits, and human scientific review outside the required offline tests.

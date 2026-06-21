@@ -1,0 +1,38 @@
+{
+  "id": "fixture-sentinel2-l2a-optical-001",
+  "role": "optical",
+  "adapter": "fixture_stac",
+  "provider": "ESA",
+  "collection": "sentinel-2-l2a",
+  "dataset": "sentinel2_l2a_surface_reflectance",
+  "asset": "B02_B03_B04_B08_B11_SCL",
+  "datetime": "2024-07-18T10:30:00Z",
+  "bbox": [-75.25, 39.85, -74.75, 40.25],
+  "crs": "EPSG:32618",
+  "resolution_m": 10,
+  "nodata": 0,
+  "cloud_cover": 8.5,
+  "cloud_shadow_metadata": {
+    "qa_band": "SCL",
+    "cloud_classes": [8, 9, 10],
+    "shadow_classes": [3],
+    "notes": "Fixture placeholder for Sentinel-2 Scene Classification Layer."
+  },
+  "license": "Copernicus Sentinel data",
+  "href": "mock://sentinel-2-l2a/fixture-sentinel2-l2a-optical-001/B08.tif",
+  "downloaded": false,
+  "requires_credentials": false,
+  "query": {
+    "collections": ["sentinel-2-l2a"],
+    "datetime": "2024-07-01/2024-08-31",
+    "eo:cloud_cover": {"lt": 20}
+  },
+  "provenance": {
+    "fixture": "stac_sentinel2_l2a_item.json",
+    "source_kind": "stac_item",
+    "version": "fixture-v0.2"
+  },
+  "validation_notes": [
+    "Fixture metadata only; no optical assets were downloaded."
+  ]
+}

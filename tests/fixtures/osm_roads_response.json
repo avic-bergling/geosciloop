@@ -1,0 +1,34 @@
+{
+  "role": "roads",
+  "adapter": "fixture_osm",
+  "provider": "OpenStreetMap",
+  "collection": "overpass_roads",
+  "dataset": "osm_roads",
+  "datetime": "2024-07-20T00:00:00Z",
+  "bbox": [-75.25, 39.85, -74.75, 40.25],
+  "crs": "EPSG:4326",
+  "resolution_m": null,
+  "nodata": null,
+  "cloud_cover": null,
+  "cloud_shadow_metadata": {},
+  "license": "ODbL",
+  "href": "mock://osm/fixture-pilot-city/roads.json",
+  "downloaded": false,
+  "requires_credentials": false,
+  "query": {
+    "bbox": [-75.25, 39.85, -74.75, 40.25],
+    "overpass_filter": "way[highway]"
+  },
+  "provenance": {
+    "fixture": "osm_roads_response.json",
+    "source_kind": "overpass_response",
+    "version": "fixture-v0.2"
+  },
+  "elements": [
+    {"type": "way", "id": 1001, "tags": {"highway": "residential"}},
+    {"type": "way", "id": 1002, "tags": {"highway": "primary"}}
+  ],
+  "validation_notes": [
+    "Fixture vector metadata only; no OSM download was performed."
+  ]
+}

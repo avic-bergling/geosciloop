@@ -37,7 +37,7 @@ Use OpenAI Agents SDK or Codex MCP when an external orchestrator needs to call C
 ## Staged roadmap
 
 - v0.1: deterministic offline runner.
-- v0.2: real STAC, GEE, and OSM adapters behind optional extras.
+- v0.2: fixture-backed STAC, GEE, OSM, and population-grid adapter prototype behind the simple runner.
 - v0.3: LangGraph stateful agent loop.
 - v0.4: GeoSciBench benchmark.
 - v0.5: citation checking and human-in-the-loop review.

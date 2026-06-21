@@ -1,9 +1,15 @@
 import importlib.metadata
+from pathlib import Path
 
 from geosciloop.adapters.gee import GEEAdapter, OptionalDependencyNotAvailable
+from geosciloop.adapters.gee_adapter import FixtureGEEAdapter
 from geosciloop.adapters.osm import OSMAdapter
+from geosciloop.adapters.osm_adapter import FixtureOSMAdapter
 from geosciloop.adapters.provenance import DataSourceProvenance, build_real_data_manifest
 from geosciloop.adapters.stac import STACAdapter
+from geosciloop.adapters.stac_adapter import FixtureSTACAdapter
+from geosciloop.adapters.registry import build_adapter
+from geosciloop.core.schema import DataSourceRequest
 
 
 class FakeSTACSearch:
@@ -151,3 +157,61 @@ def test_real_data_manifest_records_provenance_without_secrets():
     assert manifest["records"][0]["query"]["token"] == "<redacted>"
     assert manifest["records"][1]["query"]["service_account_key"] == "<redacted>"
     assert manifest["records"][1]["credentials_required"] is True
+
+
+def _request(role: str, adapter: str, collection: str = "", dataset: str = "") -> DataSourceRequest:
+    return DataSourceRequest(
+        role=role,
+        adapter=adapter,
+        provider="fixture",
+        collection=collection,
+        dataset=dataset,
+        asset_roles=["metadata"],
+        query_type="fixture",
+        required_tags=[],
+        cloud_cover_max=20.0 if role in {"lst", "optical"} else None,
+        required_metadata=["crs", "resolution_m", "nodata", "provenance"],
+        license="fixture-only",
+        notes="test request",
+    )
+
+
+def test_fixture_stac_adapter_returns_landsat_and_sentinel_metadata_without_network():
+    fixture_dir = Path("tests/fixtures")
+    adapter = FixtureSTACAdapter(fixture_dir=fixture_dir)
+
+    landsat = adapter.describe(adapter.search(_request("lst", "fixture_stac", collection="landsat-c2-l2"))[0])
+    sentinel = adapter.describe(adapter.search(_request("optical", "fixture_stac", collection="sentinel-2-l2a"))[0])
+
+    assert landsat.provider == "USGS"
+    assert landsat.collection == "landsat-c2-l2"
+    assert landsat.role == "lst"
+    assert landsat.href.startswith("mock://")
+    assert landsat.downloaded is False
+    assert landsat.requires_credentials is False
+    assert landsat.cloud_shadow_metadata["qa_band"] == "QA_PIXEL"
+    assert sentinel.provider == "ESA"
+    assert sentinel.collection == "sentinel-2-l2a"
+    assert sentinel.role == "optical"
+    assert sentinel.cloud_cover == 8.5
+
+
+def test_fixture_osm_adapter_returns_road_metadata_without_network():
+    adapter = FixtureOSMAdapter(fixture_dir=Path("tests/fixtures"))
+
+    record = adapter.describe(adapter.search(_request("roads", "fixture_osm", dataset="osm_roads"))[0])
+
+    assert record.provider == "OpenStreetMap"
+    assert record.dataset == "osm_roads"
+    assert record.role == "roads"
+    assert record.resolution_m is None
+    assert record.downloaded is False
+    assert record.provenance["fixture"] == "osm_roads_response.json"
+
+
+def test_registry_builds_fixture_adapters_by_name():
+    fixture_dir = Path("tests/fixtures")
+
+    assert isinstance(build_adapter("fixture_stac", fixture_dir=fixture_dir), FixtureSTACAdapter)
+    assert isinstance(build_adapter("fixture_osm", fixture_dir=fixture_dir), FixtureOSMAdapter)
+    assert isinstance(build_adapter("fixture_gee", fixture_dir=fixture_dir), FixtureGEEAdapter)

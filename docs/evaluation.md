@@ -1,4 +1,4 @@
-# GeoSciLoop v0.1 Evaluation
+# GeoSciLoop Evaluation
 
 GeoSciLoop v0.1 uses a lightweight offline evaluator for deterministic demo runs. The evaluator is a GeoSciBench-style quality gate for artifacts and provenance, not a claim that the system performs autonomous scientific discovery.
 
@@ -56,3 +56,22 @@ The reproducibility layer checks that the output records:
 - ledger copies of variable roles, synthetic truth, and split metadata
 
 These checks are designed for the synthetic offline v0.1 workflow. They do not validate real data quality, scientific novelty, external citations, or policy relevance.
+
+## v0.2 Dry-Run Evaluation
+
+The v0.2 dry-run evaluator writes a `benchmark_summary.json` with schema version `geosciloop-benchmark-v0.2-dry-run`.
+
+Sub-scores are:
+
+- `execution_success`
+- `artifact_completeness`
+- `data_source_manifest_completeness`
+- `metadata_validation_status`
+- `provenance_completeness`
+- `adapter_plan_completeness`
+- `ledger_completeness`
+- `reproducibility`
+- `report_disclaimer_quality`
+- `no_live_dependency_check`
+
+These checks verify dry-run planning artifacts. They do not score real-world scientific validity and do not imply that live remote-sensing or GIS analysis occurred.

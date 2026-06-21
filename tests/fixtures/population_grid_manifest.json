@@ -1,0 +1,31 @@
+{
+  "role": "population",
+  "adapter": "fixture_population",
+  "provider": "FixturePopulation",
+  "collection": "population-grid",
+  "dataset": "fixture_population_density",
+  "asset": "population_density",
+  "datetime": "2024-01-01T00:00:00Z",
+  "bbox": [-75.25, 39.85, -74.75, 40.25],
+  "crs": "EPSG:32618",
+  "resolution_m": 100,
+  "nodata": -9999,
+  "cloud_cover": null,
+  "cloud_shadow_metadata": {},
+  "license": "fixture-only",
+  "href": "mock://population/fixture-pilot-city/population_density.tif",
+  "downloaded": false,
+  "requires_credentials": false,
+  "query": {
+    "bbox": [-75.25, 39.85, -74.75, 40.25],
+    "variables": ["population_density", "population_exposure"]
+  },
+  "provenance": {
+    "fixture": "population_grid_manifest.json",
+    "source_kind": "population_grid_manifest",
+    "version": "fixture-v0.2"
+  },
+  "validation_notes": [
+    "Fixture metadata only; no population grid was downloaded."
+  ]
+}

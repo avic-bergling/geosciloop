@@ -33,6 +33,20 @@ It also checks that metrics are finite, R2 is in `[-1, 1]`, and RMSE/MAE are non
 ## `check_conclusion_support`
 
 Checks report claims against metric evidence. The v0.1 implementation supports a deterministic check for the claim that NDVI is negatively associated with LST. It also warns on causal language unless a future causal design is recorded.
+
+## v0.2 Metadata Validators
+
+The v0.2 dry-run workflow adds metadata validators for fixture-backed source manifests:
+
+- CRS metadata.
+- Raster resolution metadata.
+- Raster alignment and target grid strategy.
+- NoData metadata and handling plan.
+- Cloud/shadow QA metadata and cloud threshold.
+- Source provenance.
+- Split strategy and spatial leakage risk.
+
+These validators check planning metadata only. They do not inspect live raster pixels, vector geometries, or external data quality.
 It also checks positive association claims for NDBI, building density, population density, and road density when those claims appear in report text. A workflow without a recorded causal design emits a warning so future reports do not drift into causal wording.
 
 ## Validation philosophy

@@ -1,6 +1,17 @@
 # Data Sources
 
-This document lists candidate real-data sources for future GeoSciLoop workflows. They are not used by the default v0.1 offline demo.
+This document lists candidate real-data sources and the v0.2 fixture-backed dry-run sources. They are not live data dependencies for required tests.
+
+## v0.2 Fixture Sources
+
+`configs/uhi_real_pilot_template.yaml` plans four source roles:
+
+- `lst`: Landsat Collection 2 Level-2 style STAC fixture.
+- `optical`: Sentinel-2 Level-2A style STAC fixture.
+- `roads`: OpenStreetMap roads fixture.
+- `population`: population-grid manifest fixture.
+
+The fixtures live in `tests/fixtures/` and use `mock://` hrefs. They provide metadata for validators but are not real downloaded datasets.
 
 ## Remote-Sensing Imagery
 

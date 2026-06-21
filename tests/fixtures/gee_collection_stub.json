@@ -1,0 +1,38 @@
+{
+  "role": "lst",
+  "adapter": "fixture_gee",
+  "provider": "Google Earth Engine",
+  "collection": "LANDSAT/LC08/C02/T1_L2",
+  "dataset": "gee_landsat_l2_stub",
+  "asset": "ST_B10",
+  "datetime": "2024-07-01/2024-08-31",
+  "bbox": [-75.25, 39.85, -74.75, 40.25],
+  "crs": "EPSG:32618",
+  "resolution_m": 30,
+  "nodata": -9999,
+  "cloud_cover": 15.0,
+  "cloud_shadow_metadata": {
+    "qa_band": "QA_PIXEL",
+    "cloud_bit": 3,
+    "shadow_bit": 4,
+    "notes": "Dry-run GEE fixture; no Earth Engine authentication occurs."
+  },
+  "license": "provider-specific",
+  "href": "mock://gee/LANDSAT/LC08/C02/T1_L2/ST_B10",
+  "downloaded": false,
+  "requires_credentials": false,
+  "query": {
+    "collection_id": "LANDSAT/LC08/C02/T1_L2",
+    "bands": ["ST_B10", "QA_PIXEL"],
+    "start_date": "2024-07-01",
+    "end_date": "2024-08-31"
+  },
+  "provenance": {
+    "fixture": "gee_collection_stub.json",
+    "source_kind": "gee_collection_stub",
+    "version": "fixture-v0.2"
+  },
+  "validation_notes": [
+    "Dry-run fixture only; no GEE authentication or export was performed."
+  ]
+}

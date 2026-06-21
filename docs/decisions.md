@@ -57,3 +57,17 @@ Status: accepted.
 GeoSciLoop v0.1 release artifacts should track source code, configs, tests, docs, and small curated documentation examples only. Full runtime output folders under `outputs/`, pytest temporary directories, build artifacts, editable-install metadata, local virtual environments, and temporary logs are ignored through `.gitignore`.
 
 The reason is practical reproducibility: outputs should be regenerated from configs and commands, not committed as stale release state. If a future release needs sample artifacts, add a deliberately small curated directory such as `docs/example_outputs/` with hand-selected files and document how it was produced.
+
+## Decision: v0.2 uses fixture-backed adapters before live providers
+
+Status: accepted.
+
+GeoSciLoop v0.2 adds real-data workflow planning without requiring live data access. STAC, GEE, OSM, and population-grid sources are represented by local fixtures and dry-run adapter plans. This preserves offline deterministic tests while making CRS, resolution, alignment, NoData, cloud/shadow QA, source provenance, and split strategy first-class metadata checks.
+
+Provider-backed access remains optional future work and must be explicitly configured outside required tests. No new dependencies are required for v0.2.
+
+## Decision: keep v0.3 harness decisions deferred
+
+Status: accepted.
+
+The v0.2 dry-run workflow remains a simple deterministic Python runner. LangGraph, Snakemake, Prefect, CrewAI, AutoGen, and other stateful harnesses are still deferred until real workflow complexity justifies them and an artifact equivalence test surface exists.

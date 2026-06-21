@@ -1,0 +1,39 @@
+{
+  "id": "fixture-landsat-l2-lst-001",
+  "role": "lst",
+  "adapter": "fixture_stac",
+  "provider": "USGS",
+  "collection": "landsat-c2-l2",
+  "dataset": "landsat_l2_surface_temperature",
+  "asset": "ST_B10",
+  "datetime": "2024-07-15T10:00:00Z",
+  "bbox": [-75.25, 39.85, -74.75, 40.25],
+  "crs": "EPSG:32618",
+  "resolution_m": 30,
+  "nodata": -9999,
+  "cloud_cover": 12.0,
+  "cloud_shadow_metadata": {
+    "qa_band": "QA_PIXEL",
+    "cloud_bit": 3,
+    "shadow_bit": 4,
+    "snow_bit": 5,
+    "notes": "Fixture placeholder for Landsat Collection 2 QA_PIXEL flags."
+  },
+  "license": "USGS public domain",
+  "href": "mock://landsat-c2-l2/fixture-landsat-l2-lst-001/ST_B10.tif",
+  "downloaded": false,
+  "requires_credentials": false,
+  "query": {
+    "collections": ["landsat-c2-l2"],
+    "datetime": "2024-07-01/2024-08-31",
+    "eo:cloud_cover": {"lt": 20}
+  },
+  "provenance": {
+    "fixture": "stac_landsat_l2_item.json",
+    "source_kind": "stac_item",
+    "version": "fixture-v0.2"
+  },
+  "validation_notes": [
+    "Fixture metadata only; no raster was downloaded."
+  ]
+}

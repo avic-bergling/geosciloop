@@ -1,0 +1,147 @@
+project_name: uhi_real_pilot_template
+task_type: urban_heat_island
+mode: dry_run
+offline: true
+dry_run: true
+execution:
+  download: false
+  require_credentials: false
+research_question: "How would a real-data Urban Heat Island workflow combine planned LST, optical, roads, and population sources for reproducible metadata validation before any live data access?"
+aoi_name: "Fixture Pilot City"
+aoi:
+  name: "Fixture Pilot City"
+  bbox:
+    - -75.25
+    - 39.85
+    - -74.75
+    - 40.25
+  crs: EPSG:4326
+start_date: "2024-07-01"
+end_date: "2024-08-31"
+time_range:
+  start: "2024-07-01"
+  end: "2024-08-31"
+target_variable: lst_celsius
+target: lst_celsius
+explanatory_variables:
+  - ndvi
+  - ndbi
+  - ndwi
+  - road_density
+  - population_density
+  - population_exposure
+predictors:
+  - ndvi
+  - ndbi
+  - ndwi
+  - road_density
+  - population_density
+risk_indicators:
+  - population_exposure
+categorical_variables: []
+metadata_variables:
+  - source_id
+  - datetime
+  - crs
+  - resolution_m
+grid_size_m: 30
+models:
+  - dry_run_metadata_plan
+output_dir: outputs/uhi_real_pilot_template
+random_seed: 202
+n_cells: 1
+metadata_plan:
+  target_crs: EPSG:32618
+  target_resolution_m: 30
+  alignment_strategy: "Resample raster-like fixtures to a shared 30 m projected grid before any modeled analysis."
+  nodata_handling: "Mask NoData values and record source-specific NoData codes before feature aggregation."
+  cloud_shadow_handling: "Use provider QA bands and cloud/shadow metadata before deriving NDVI, NDBI, NDWI, or LST inputs."
+  cloud_cover_max: 20
+data_sources:
+  - role: lst
+    adapter: fixture_stac
+    provider: USGS
+    collection: landsat-c2-l2
+    dataset: landsat_l2_surface_temperature
+    asset_roles:
+      - surface_temperature
+      - qa
+    query_type: stac_fixture
+    required_tags:
+      - landsat
+      - collection-2
+      - level-2
+    cloud_cover_max: 20
+    required_metadata:
+      - crs
+      - resolution_m
+      - nodata
+      - cloud_cover
+      - cloud_shadow_metadata
+      - provenance
+    license: USGS public domain
+    notes: "Fixture-backed Landsat Collection 2 Level-2 style source for LST planning."
+  - role: optical
+    adapter: fixture_stac
+    provider: ESA
+    collection: sentinel-2-l2a
+    dataset: sentinel2_l2a_surface_reflectance
+    asset_roles:
+      - red
+      - green
+      - nir
+      - swir
+      - scl
+    query_type: stac_fixture
+    required_tags:
+      - sentinel-2
+      - level-2a
+    cloud_cover_max: 20
+    required_metadata:
+      - crs
+      - resolution_m
+      - nodata
+      - cloud_cover
+      - cloud_shadow_metadata
+      - provenance
+    license: Copernicus Sentinel data
+    notes: "Fixture-backed Sentinel-2 Level-2A style source for optical index planning."
+  - role: roads
+    adapter: fixture_osm
+    provider: OpenStreetMap
+    collection: overpass_roads
+    dataset: osm_roads
+    asset_roles:
+      - roads
+    query_type: osm_fixture
+    required_tags:
+      - highway
+    required_metadata:
+      - bbox
+      - provenance
+      - license
+    license: ODbL
+    notes: "Fixture-backed OSM road source for road-density planning."
+  - role: population
+    adapter: fixture_population
+    provider: FixturePopulation
+    collection: population-grid
+    dataset: fixture_population_density
+    asset_roles:
+      - population_density
+      - population_exposure
+    query_type: manifest_fixture
+    required_tags:
+      - population
+      - exposure
+    required_metadata:
+      - crs
+      - resolution_m
+      - nodata
+      - provenance
+    license: fixture-only
+    notes: "Fixture-backed population grid manifest for exposure planning."
+split_strategy:
+  method: random
+  spatial_awareness: false
+  notes: "This template intentionally uses a random split to trigger a spatial leakage warning; real geospatial work should use spatial or block splits."

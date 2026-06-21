@@ -14,6 +14,7 @@ def build_parser() -> argparse.ArgumentParser:
     run_parser = subparsers.add_parser("run", help="Run a GeoSciLoop workflow config.")
     run_parser.add_argument("config", help="Path to YAML config.")
     run_parser.add_argument("--offline", action="store_true", help="Force offline mode.")
+    run_parser.add_argument("--dry-run", action="store_true", help="Run fixture-backed dry-run planning mode.")
     run_parser.add_argument("--output-dir", help="Override output directory.")
     return parser
 
@@ -23,7 +24,11 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     if args.command == "run":
-        config = load_task_config(args.config, offline_override=True if args.offline else None)
+        config = load_task_config(
+            args.config,
+            offline_override=True if args.offline else None,
+            dry_run_override=True if args.dry_run else None,
+        )
         if args.output_dir:
             config.output_dir = Path(args.output_dir)
         result = run_config(config)

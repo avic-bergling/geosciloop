@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from geosciloop.core.schema import load_task_config, parse_task_config
+from geosciloop.core.schema import DataSourceRequest, load_task_config, parse_task_config
 
 
 def test_loads_demo_config_with_expected_fields():
@@ -66,3 +66,29 @@ def test_config_rejects_missing_required_field():
                 "offline": True,
             }
         )
+
+
+def test_loads_real_pilot_template_with_v0_2_schema_fields():
+    config = load_task_config(Path("configs/uhi_real_pilot_template.yaml"), dry_run_override=True)
+
+    assert config.project_name == "uhi_real_pilot_template"
+    assert config.mode == "dry_run"
+    assert config.offline is True
+    assert config.dry_run is True
+    assert config.execution["download"] is False
+    assert config.execution["require_credentials"] is False
+    assert config.aoi.name == "Fixture Pilot City"
+    assert config.aoi.crs == "EPSG:4326"
+    assert config.aoi.bbox == [-75.25, 39.85, -74.75, 40.25]
+    assert config.time_range.start == "2024-07-01"
+    assert config.time_range.end == "2024-08-31"
+    assert config.target_variable == "lst_celsius"
+    assert config.predictors == ["ndvi", "ndbi", "ndwi", "road_density", "population_density"]
+    assert config.risk_indicators == ["population_exposure"]
+    assert config.split_strategy.method == "random"
+    assert config.split_strategy.spatial_awareness is False
+    assert len(config.data_sources) == 4
+    assert all(isinstance(source, DataSourceRequest) for source in config.data_sources)
+    assert {source.role for source in config.data_sources} == {"lst", "optical", "roads", "population"}
+    assert config.data_sources[0].adapter == "fixture_stac"
+    assert "crs" in config.data_sources[0].required_metadata
