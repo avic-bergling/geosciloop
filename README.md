@@ -80,7 +80,7 @@ The JSON/YAML artifacts are the audit source of truth. The Markdown files are ge
 
 ## Project Status
 
-GeoSciLoop is ready for v0.1.0 tag preparation as an offline deterministic architecture demo once the working tree is committed cleanly and final verification commands pass. It is not yet ready to be described as a real-data UHI analysis system.
+GeoSciLoop v0.1.0 has been tagged and published as an offline deterministic architecture demo. It is not yet ready to be described as a real-data UHI analysis system.
 
 See:
 
