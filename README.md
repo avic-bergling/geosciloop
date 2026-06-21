@@ -122,7 +122,7 @@ run_log.json                      dry-run status and no-live-dependency flags
 
 GeoSciLoop v0.1.0 has been tagged and published as an offline deterministic architecture demo. It is not yet ready to be described as a real-data UHI analysis system.
 
-GeoSciLoop is ready for v0.2.0 release review after final verification. It is not yet tagged as `v0.2.0` unless this cleanup is later tagged by a maintainer.
+GeoSciLoop v0.2.0 has been tagged and published as a fixture-based real-data workflow planning prototype. It remains a dry-run/fixture-based system by default and does not perform live real-data remote-sensing analysis unless future provider-backed adapters are explicitly configured.
 
 See:
 
