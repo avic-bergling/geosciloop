@@ -1,6 +1,6 @@
 # GeoSciLoop
 
-GeoSciLoop is a reproducibility-first remote-sensing/GIS AI-scientist scaffold. v0.1.0 is a deterministic offline synthetic Urban Heat Island demo, and the v0.2.0 work adds a fixture-based real-data adapter prototype for dry-run planning.
+GeoSciLoop is a reproducibility-first remote-sensing/GIS workflow scaffold. v0.1.0 is a deterministic offline synthetic Urban Heat Island demo, and v0.2.0 adds a fixture-based real-data adapter prototype for dry-run planning.
 
 It demonstrates a small research loop:
 
@@ -43,19 +43,22 @@ python -m geosciloop.cli run configs/uhi_real_pilot_template.yaml --dry-run
 - Writes a decomposed `benchmark_summary.json` quality gate. Use this file as the source of truth for artifact completeness and benchmark-style release checks.
 - Provides optional STAC, GEE, OSM, and provenance adapter interfaces for future work without making them part of the offline v0.1 demo.
 
-## What v0.2.0 Adds In This Branch
+## What v0.2.0 Adds
 
-- Adds a dry-run real-data planning template at `configs/uhi_real_pilot_template.yaml`.
-- Adds structured AOI, time range, data source request, data source record, manifest, and split-strategy schema objects.
-- Adds fixture-backed STAC, GEE, OSM, and population-grid adapters.
-- Writes `adapter_plan.json`, `data_source_manifest.json`, `metadata_validation_report.json`, `dry_run_report.md`, `summary.md`, `research_ledger.json`, `benchmark_summary.json`, and `run_log.json` for the dry-run template.
-- Validates planned metadata for CRS, resolution, raster alignment, NoData, cloud/shadow QA, source provenance, and split strategy.
-- Keeps provider-backed access optional future work outside required tests.
+- Dry-run real-data planning through `configs/uhi_real_pilot_template.yaml`.
+- Fixture-backed STAC, GEE, OSM, and population-grid adapters.
+- Data source manifest generation through `data_source_manifest.json`.
+- Metadata validators for CRS, resolution, raster alignment, NoData, cloud/shadow QA, source provenance, and split strategy.
+- `dry_run_report.md` and `summary.md` for human-readable dry-run review.
+- Decomposed v0.2 benchmark sub-scores for adapter plans, manifest completeness, provenance, ledger completeness, reproducibility, disclaimers, and no-live-dependency checks.
 
 ## What v0.2.0 Still Does Not Do
 
 - It does not run live STAC, GEE, OSM, GHSL, WorldPop, or other external provider queries by default.
+- It does not perform live data downloads.
 - It does not authenticate or require API keys.
+- It does not authenticate to Google Earth Engine.
+- It does not call live STAC catalogs or live OSM/Overpass endpoints in required tests.
 - It does not download real rasters, vectors, or population grids.
 - It does not process real pixels or geometries.
 - It does not make real-world UHI conclusions.
@@ -78,7 +81,7 @@ python -m geosciloop.cli run configs/uhi_real_pilot_template.yaml --dry-run
 - `configs/uhi_morphology_synthetic_demo.yaml`: synthetic morphology demo with functional zones and population exposure as a risk indicator.
 - `configs/uhi_real_pilot_template.yaml`: v0.2 fixture-backed dry-run template for real-data workflow planning.
 
-Both configs run offline and write outputs under `outputs/`, which is intentionally ignored by git.
+All bundled configs run offline or dry-run locally and write outputs under `outputs/`, which is intentionally ignored by git.
 
 ## Output Artifacts
 
@@ -119,7 +122,7 @@ run_log.json                      dry-run status and no-live-dependency flags
 
 GeoSciLoop v0.1.0 has been tagged and published as an offline deterministic architecture demo. It is not yet ready to be described as a real-data UHI analysis system.
 
-The v0.2.0 work in this branch is a fixture-based real-data adapter prototype for dry-run planning. It is not a released tag unless explicitly tagged later by a maintainer.
+GeoSciLoop is ready for v0.2.0 release review after final verification. It is not yet tagged as `v0.2.0` unless this cleanup is later tagged by a maintainer.
 
 See:
 
@@ -127,6 +130,8 @@ See:
 - `docs/scientific_reliability_audit.md`
 - `docs/release_readiness.md`
 - `docs/release_notes_v0.1.0.md`
+- `docs/release_readiness_v0.2.md`
+- `docs/release_notes_v0.2.0.md`
 
 ## Development And Validation
 

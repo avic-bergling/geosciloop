@@ -2,33 +2,38 @@
 
 All notable changes to GeoSciLoop are documented here.
 
-## Unreleased - v0.2.0
+## 0.2.0 - 2026-06-21
 
-Fixture-based real-data adapter prototype release-candidate work.
+Fixture-based real-data workflow planning prototype.
 
 ### Added
 
-- Dry-run real-data planning config template: `configs/uhi_real_pilot_template.yaml`.
-- Structured v0.2 schema objects for AOI, time range, data source requests, data source records, manifests, and split strategy.
-- Fixture-backed STAC, GEE, OSM, and population-grid adapters that do not authenticate, download, or call live services in required tests.
-- Dry-run workflow that writes adapter plans, data source manifest, metadata validation report, ledger, dry-run report, summary, benchmark summary, and run log.
-- Metadata validators for CRS, raster resolution, raster alignment, NoData, cloud/shadow QA metadata, source provenance, and spatial split strategy.
-- v0.2 dry-run benchmark sub-scores for artifact completeness, manifest completeness, provenance, adapter plans, ledger, reproducibility, disclaimers, and no-live-dependency checks.
-- Documentation for v0.2 planning, fixture adapters, metadata validators, dry-run workflow, and release-readiness review.
+- Fixture-based real-data adapter prototype.
+- Dry-run workflow for `configs/uhi_real_pilot_template.yaml`.
+- `adapter_plan.json` artifact.
+- `data_source_manifest.json`.
+- `metadata_validation_report.json`.
+- `dry_run_report.md` and `summary.md`.
+- Research ledger integration for `dry_run`, `download_performed`, and `credentials_required`.
+- Metadata validators for CRS, resolution, alignment, NoData, cloud/shadow QA, provenance, and split strategy.
+- Decomposed benchmark sub-scores for the v0.2 dry-run.
+- Fixture-backed STAC, GEE, OSM, and population adapters.
+- Offline tests for adapters, validators, workflow, and evaluator.
 
 ### Clarified
 
-- v0.2 is a fixture-based prototype for real-data workflow planning, not a live real-data analysis system.
-- Required v0.2 tests remain offline and deterministic.
-- Real STAC, GEE, OSM, and population-grid access remain optional future/provider-backed work outside required tests.
-- v0.2 makes no real-world UHI conclusions and does not make GeoSciLoop a complete autonomous scientist.
+- v0.2 does not perform live real-data analysis by default.
+- v0.2 does not require GEE, STAC, OSM, API keys, credentials, internet, or external datasets for tests.
+- v0.2 does not make real-world scientific claims.
 
 ### Deferred
 
-- Provider-backed live data access, downloads, and authentication.
-- Raster/vector processing of real external datasets.
-- Spatial/block split implementation for real model evaluation.
-- v0.3 harness decisions, including LangGraph, Snakemake, Prefect, CrewAI, and AutoGen.
+- Live STAC/GEE/OSM provider-backed execution.
+- Real raster loading and processing.
+- Actual cloud masking.
+- Actual spatial-block split implementation.
+- LangGraph, Snakemake, Prefect, or other harness adoption.
+- Real-world claim gates and citation verification.
 
 ## 0.1.0 - 2026-06-21
 

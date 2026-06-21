@@ -7,7 +7,7 @@ This inventory reflects the files found in the working tree during the milestone
 ## Repository State
 
 - The working tree contains v0.2 release-candidate implementation changes until they are committed.
-- The base package version is `0.1.0` in `pyproject.toml`.
+- The base package version is `0.2.0` in `pyproject.toml`.
 - The base dependency set remains offline-friendly: `matplotlib`, `numpy`, `pandas`, `PyYAML`, and `scikit-learn`; `pytest` is a development extra.
 - Optional extras `geo` and `gee` exist but are empty.
 

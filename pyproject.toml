@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "geosciloop"
-version = "0.1.0"
-description = "Reproducibility-first remote-sensing/GIS AI-scientist workflow starter focused on an offline UHI demo."
+version = "0.2.0"
+description = "Reproducibility-first remote-sensing/GIS workflow scaffold with offline synthetic demos and fixture-based dry-run real-data planning."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { file = "LICENSE" }

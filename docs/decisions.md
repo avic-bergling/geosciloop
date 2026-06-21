@@ -64,7 +64,7 @@ Status: accepted.
 
 GeoSciLoop v0.2 adds real-data workflow planning without requiring live data access. STAC, GEE, OSM, and population-grid sources are represented by local fixtures and dry-run adapter plans. This preserves offline deterministic tests while making CRS, resolution, alignment, NoData, cloud/shadow QA, source provenance, and split strategy first-class metadata checks.
 
-Provider-backed access remains optional future work and must be explicitly configured outside required tests. No new dependencies are required for v0.2.
+Provider-backed access remains optional future work and must be explicitly configured outside required tests. No new dependencies are required for v0.2. The simple deterministic runner remains the execution path for both v0.1 demos and the v0.2 dry-run.
 
 ## Decision: keep v0.3 harness decisions deferred
 
